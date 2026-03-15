@@ -34,41 +34,39 @@ frontend/tsconfig.tsbuildinfo
 # BACKEND (ASP.NET Core / .NET)
 # ============================================================
 
-# Build output
-backend/bin/
-backend/obj/
-backend/out/
-backend/publish/
+# Build output — ловит bin/obj в любом вложенном проекте
+backend/**/bin/
+backend/**/obj/
+backend/**/out/
+backend/**/publish/
 
 # Environment — секреты не коммитим
-backend/appsettings.Production.json
-backend/appsettings.Staging.json
-backend/*.pfx
-backend/*.p12
+backend/**/appsettings.Production.json
+backend/**/appsettings.Staging.json
+backend/**/*.pfx
+backend/**/*.p12
 
 # User-specific files
-backend/*.rsuser
-backend/*.suo
-backend/*.user
-backend/*.userosscache
-backend/*.sln.docstates
+backend/**/*.rsuser
+backend/**/*.suo
+backend/**/*.user
+backend/**/*.userosscache
+backend/**/*.sln.docstates
 
 # NuGet
-backend/.nuget/
-backend/packages/
-backend/*.nupkg
-backend/*.snupkg
+backend/**/.nuget/
+backend/**/packages/
+backend/**/*.nupkg
+backend/**/*.snupkg
 
 # Rider / Resharper
-backend/.idea/
 backend/_ReSharper*/
-backend/*.DotSettings.user
+backend/**/*.DotSettings.user
 
 # Publish profiles
-backend/Properties/PublishProfiles/
+backend/**/Properties/PublishProfiles/
 
 # Secrets (никогда не коммитить)
-backend/secrets.json
 backend/**/secrets.json
 
 # ============================================================
