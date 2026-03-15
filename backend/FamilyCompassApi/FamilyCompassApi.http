@@ -1,0 +1,6 @@
+@FamilyCompassApi_HostAddress = http://localhost:5138
+
+GET {{FamilyCompassApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
