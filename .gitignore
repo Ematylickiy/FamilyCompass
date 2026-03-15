@@ -1,0 +1,163 @@
+# ============================================================
+# FRONTEND (React + Vite + TypeScript)
+# ============================================================
+
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+frontend/.yarn/install-state.gz
+
+# Build output
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+frontend/.vite/
+
+# Environment — секреты не коммитим
+frontend/.env.local
+frontend/.env.*.local
+frontend/.env.production
+frontend/.env.staging
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# Editor
+frontend/.eslintcache
+frontend/tsconfig.tsbuildinfo
+
+# ============================================================
+# BACKEND (ASP.NET Core / .NET)
+# ============================================================
+
+# Build output
+backend/bin/
+backend/obj/
+backend/out/
+backend/publish/
+
+# Environment — секреты не коммитим
+backend/appsettings.Production.json
+backend/appsettings.Staging.json
+backend/*.pfx
+backend/*.p12
+
+# User-specific files
+backend/*.rsuser
+backend/*.suo
+backend/*.user
+backend/*.userosscache
+backend/*.sln.docstates
+
+# NuGet
+backend/.nuget/
+backend/packages/
+backend/*.nupkg
+backend/*.snupkg
+
+# Rider / Resharper
+backend/.idea/
+backend/_ReSharper*/
+backend/*.DotSettings.user
+
+# Publish profiles
+backend/Properties/PublishProfiles/
+
+# Secrets (никогда не коммитить)
+backend/secrets.json
+backend/**/secrets.json
+
+# ============================================================
+# DATABASE
+# ============================================================
+
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# ============================================================
+# OS
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================
+# IDE / EDITORS
+# ============================================================
+
+# VS Code (оставляем .vscode/extensions.json — полезно для команды)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Visual Studio
+.vs/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# JetBrains (Rider, WebStorm)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# ============================================================
+# DOCKER (на будущее)
+# ============================================================
+
+.dockerignore
+docker-compose.override.yml
+
+# ============================================================
+# CI/CD (на будущее)
+# ============================================================
+
+# Локальные Act (GitHub Actions runner)
+.act/
+
+# ============================================================
+# LOGS / TEMP
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+.cache/
+tmp/
+temp/
