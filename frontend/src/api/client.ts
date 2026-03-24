@@ -1,37 +1,35 @@
-const client = {
-  get: async <T>(baseUrl: string): Promise<T> => {
-    const response = await fetch(`api/v1/${baseUrl}`);
-    return response.json() as Promise<T>;
-  },
-  post: async <T>(
-    baseUrl: string,
-    body: Record<string, unknown>,
-  ): Promise<T> => {
-    const response = await fetch(`api/v1/${baseUrl}`, {
-      body: JSON.stringify(body),
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+async function parseJson<T>(response: Response): Promise<T> {
+  const text = await response.text();
+  if (!response.ok) {
+    throw new Error(text || `${response.status} ${response.statusText}`);
+  }
+  if (!text) {
+    return undefined as T;
+  }
+  return JSON.parse(text) as T;
+}
 
-    return response.json();
+const client = {
+  get: async <T>(path: string): Promise<T> => {
+    const response = await fetch(`api/v1/${path}`);
+    return parseJson<T>(response);
   },
-  put: async <T>(
-    baseUrl: string,
-    body: Record<string, unknown>,
-  ): Promise<T> => {
-    const response = await fetch(`api/v1/${baseUrl}`, {
+
+  post: async <T>(path: string, body: Record<string, unknown>): Promise<T> => {
+    const response = await fetch(`api/v1/${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
-      method: 'put',
     });
-    return response.json();
+    return parseJson<T>(response);
   },
-  delete: async (baseUrl: string): Promise<Response> => {
-    const response = await fetch(`api/v1/${baseUrl}`, {
-      method: 'delete',
-    });
-    return response;
+
+  delete: async (path: string): Promise<void> => {
+    const response = await fetch(`api/v1/${path}`, { method: 'DELETE' });
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || `${response.status} ${response.statusText}`);
+    }
   },
 };
 

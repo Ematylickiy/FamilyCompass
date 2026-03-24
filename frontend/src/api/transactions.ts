@@ -2,7 +2,7 @@ import client from './client';
 
 export const TransactionType = {
   Income: 'income',
-  Expense: 'Expense',
+  Expense: 'expense',
 } as const;
 
 export type TransactionType =
@@ -11,13 +11,14 @@ export type TransactionType =
 export interface Transaction {
   id: string;
   amount: number;
-  type: TransactionType;
+  type: string;
   category: string;
   date: string;
-  note?: string;
+  note?: string | null;
+  createdAt: string;
 }
 
-export type CreateTransactionRequest = Omit<Transaction, 'id'>;
+export type CreateTransactionRequest = Omit<Transaction, 'id' | 'createdAt'>;
 
 export const transactionsApi = {
   getAll: () => client.get<Transaction[]>('transactions'),
