@@ -11,8 +11,8 @@ const dateTime = new Intl.DateTimeFormat('ru-RU', {
   timeStyle: 'short',
 });
 
-function isIncome(type: string): boolean {
-  return type.toLowerCase() === TransactionType.Income;
+function isIncome(type: TransactionType): boolean {
+  return type === TransactionType.Income;
 }
 
 interface Props {
@@ -45,15 +45,10 @@ export function TransactionList({ transactions, onDelete }: Props) {
             </div>
             <div className={styles.meta}>
               <span className={styles.category}>{t.category}</span>
-              <span>
-                {dateTime.format(new Date(t.date))}
-              </span>
+              <span>{dateTime.format(new Date(t.date))}</span>
             </div>
             {t.note ? <p className={styles.note}>{t.note}</p> : null}
             <div className={styles.footer}>
-              <span className={styles.meta}>
-                Создано: {dateTime.format(new Date(t.createdAt))}
-              </span>
               <button
                 type="button"
                 className={styles.delete}

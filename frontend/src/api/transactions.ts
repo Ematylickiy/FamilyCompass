@@ -15,7 +15,6 @@ export interface Transaction {
   category: string;
   date: string;
   note?: string | null;
-  createdAt: string;
 }
 
 export type CreateTransactionRequest = Omit<Transaction, 'id' | 'createdAt'>;

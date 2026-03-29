@@ -1,8 +1,10 @@
+using FamilyCompass.Domain.Enums;
+
 namespace FamilyCompass.Application.Transactions.DTOs;
 
 public record CreateTransactionRequest(
     decimal Amount,
-    string Type,
+    TransactionType Type,
     string Category,
     DateTime Date,
     string? Note

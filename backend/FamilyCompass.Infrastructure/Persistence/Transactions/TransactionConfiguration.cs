@@ -1,4 +1,5 @@
 using FamilyCompass.Domain.Entities;
+using FamilyCompass.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,10 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .HasColumnType("decimal(18,2)");
 
         builder.Property(t => t.Type)
+            .HasConversion(
+                type => type.ToString().ToLowerInvariant(),
+                value => Enum.Parse<TransactionType>(value, true)
+            )
             .IsRequired();
 
         builder.Property(t => t.Category)

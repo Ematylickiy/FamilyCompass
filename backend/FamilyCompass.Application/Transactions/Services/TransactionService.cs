@@ -35,7 +35,6 @@ public class TransactionService(ITransactionRepository repo) : ITransactionServi
             transaction.Type,
             transaction.Category,
             transaction.Date,
-            transaction.Note,
-            transaction.CreatedAt
+            transaction.Note
         );
 }
