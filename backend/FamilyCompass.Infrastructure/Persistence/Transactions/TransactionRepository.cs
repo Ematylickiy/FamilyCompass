@@ -8,29 +8,22 @@ public class TransactionRepository(FamilyCompassDbContext db) : ITransactionRepo
 {
     public List<Transaction> GetAll()
     {
-        return db.Transactions
-            .OrderByDescending(t => t.Date)
-            .ThenByDescending(t => t.CreatedAt)
-            .ToList();
+        return db.Transactions.ToList();
     }
 
-    public Transaction? GetById(Guid id)
-    {
-        return db.Transactions.FirstOrDefault(t => t.Id == id);
-    }
-
-    public void Add(Transaction transaction)
+    public Transaction Add(Transaction transaction)
     {
         db.Transactions.Add(transaction);
-    }
-
-    public void Delete(Transaction transaction)
-    {
-        db.Transactions.Remove(transaction);
-    }
-
-    public void SaveChanges()
-    {
         db.SaveChanges();
+        return transaction;
+    }
+
+    public bool DeleteById(Guid id)
+    {
+        var transaction = db.Transactions.FirstOrDefault(t => t.Id == id);
+        if (transaction is null) return false;
+        db.Transactions.Remove(transaction);
+        db.SaveChanges();
+        return true;
     }
 }

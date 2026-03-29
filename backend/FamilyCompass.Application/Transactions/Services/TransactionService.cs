@@ -6,36 +6,36 @@ namespace FamilyCompass.Application.Transactions.Services;
 
 public class TransactionService(ITransactionRepository repo) : ITransactionService
 {
-    public List<Transaction> GetAll() =>
+    public List<TransactionResponse> GetAll() =>
         repo.GetAll()
             .OrderByDescending(t => t.Date)
             .ThenByDescending(t => t.CreatedAt)
+            .Select(MapToResponse)
             .ToList();
 
-    public Transaction Create(CreateTransactionRequest request)
+    public TransactionResponse Create(CreateTransactionRequest request)
     {
-        var transaction = new Transaction
-        {
-            Id = Guid.NewGuid(),
-            Amount = request.Amount,
-            Type = request.Type,
-            Category = request.Category,
-            Date = request.Date,
-            Note = request.Note,
-            CreatedAt = DateTime.UtcNow,
-        };
-
-        repo.Add(transaction);
-        repo.SaveChanges();
-        return transaction;
+        var transaction = Transaction.Create(
+            request.Amount,
+            request.Type,
+            request.Category,
+            request.Date,
+            request.Note
+        );
+        var created = repo.Add(transaction);
+        return MapToResponse(created);
     }
 
-    public bool Delete(Guid id)
-    {
-        var transaction = repo.GetById(id);
-        if (transaction is null) return false;
-        repo.Delete(transaction);
-        repo.SaveChanges();
-        return true;
-    }
+    public bool Delete(Guid id) => repo.DeleteById(id);
+
+    private static TransactionResponse MapToResponse(Transaction transaction) =>
+        new(
+            transaction.Id,
+            transaction.Amount,
+            transaction.Type,
+            transaction.Category,
+            transaction.Date,
+            transaction.Note,
+            transaction.CreatedAt
+        );
 }
