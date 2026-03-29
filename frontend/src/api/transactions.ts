@@ -11,7 +11,7 @@ export type TransactionType =
 export interface Transaction {
   id: string;
   amount: number;
-  type: string;
+  type: TransactionType;
   category: string;
   date: string;
   note?: string | null;
