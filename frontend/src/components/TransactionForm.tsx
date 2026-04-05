@@ -23,7 +23,9 @@ export function TransactionForm({ onSubmit }: Props) {
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<TransactionType>(TransactionType.Income);
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState(() => toDateInputValue(new Date().toISOString()));
+  const [date, setDate] = useState(() =>
+    toDateInputValue(new Date().toISOString()),
+  );
   const [note, setNote] = useState('');
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {

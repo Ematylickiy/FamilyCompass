@@ -24,9 +24,6 @@ export default function App() {
       <div className={styles.inner}>
         <header className={styles.header}>
           <h1 className={styles.title}>Семейные финансы</h1>
-          <p className={styles.subtitle}>
-            Учёт доходов и расходов. Данные хранятся на сервере.
-          </p>
         </header>
 
         {error ? (

@@ -1,0 +1,24 @@
+# Backend (ASP.NET Core API) — publish FamilyCompass.Api only
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY backend/FamilyCompass.sln ./
+COPY backend/FamilyCompass.Domain/FamilyCompass.Domain.csproj FamilyCompass.Domain/
+COPY backend/FamilyCompass.Application/FamilyCompass.Application.csproj FamilyCompass.Application/
+COPY backend/FamilyCompass.Infrastructure/FamilyCompass.Infrastructure.csproj FamilyCompass.Infrastructure/
+COPY backend/FamilyCompass.Api/FamilyCompass.Api.csproj FamilyCompass.Api/
+
+RUN dotnet restore FamilyCompass.Api/FamilyCompass.Api.csproj
+
+COPY backend/ .
+RUN dotnet publish FamilyCompass.Api/FamilyCompass.Api.csproj -c Release -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "FamilyCompass.Api.dll"]
