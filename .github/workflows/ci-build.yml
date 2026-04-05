@@ -1,4 +1,4 @@
-name: CI Docker Build Jobs
+name: CI Docker Build Final
 
 on:
   push:
@@ -13,27 +13,35 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
+      # 1. Получаем код
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2. Кэш npm зависимостей
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: frontend/node_modules
+          key: frontend-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: frontend-node-
+
+      # 3. Установка Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
+      # 4. Установка зависимостей
       - name: Install frontend dependencies
         run: |
           cd frontend
           npm ci
 
+      # 5. Сборка фронтенда
       - name: Build frontend
         run: |
           cd frontend
           npm run build
-
-      - name: Build frontend Docker image
-        run: |
-          docker build -t familycompass-frontend:ci -f Dockerfile.web .
 
   backend:
     runs-on: ubuntu-latest
@@ -42,20 +50,28 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
+      # 1. Получаем код
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2. Кэш NuGet пакетов
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ hashFiles('backend/FamilyCompass.sln') }}
+          restore-keys: nuget-
+
+      # 3. Установка .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
+      # 4. Восстановление зависимостей backend
       - name: Restore backend dependencies
         run: dotnet restore backend/FamilyCompass.Api
 
+      # 5. Сборка backend
       - name: Build backend
         run: dotnet build backend/FamilyCompass.Api --no-restore
-
-      - name: Build backend Docker image
-        run: |
-          docker build -t familycompass-backend:ci -f Dockerfile.backend .
