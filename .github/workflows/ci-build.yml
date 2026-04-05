@@ -1,4 +1,4 @@
-name: CI Build
+name: CI Docker Build Jobs
 
 on:
   push:
@@ -7,21 +7,21 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  frontend:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      # 1. Проверяем код
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Frontend: Node.js
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Install frontend deps
+      - name: Install frontend dependencies
         run: |
           cd frontend
           npm ci
@@ -31,14 +31,31 @@ jobs:
           cd frontend
           npm run build
 
-      # 3. Backend: .NET
+      - name: Build frontend Docker image
+        run: |
+          docker build -t familycompass-frontend:ci -f Dockerfile.web .
+
+  backend:
+    runs-on: ubuntu-latest
+    needs: frontend
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore backend
+      - name: Restore backend dependencies
         run: dotnet restore backend/FamilyCompass.Api
 
       - name: Build backend
         run: dotnet build backend/FamilyCompass.Api --no-restore
+
+      - name: Build backend Docker image
+        run: |
+          docker build -t familycompass-backend:ci -f Dockerfile.backend .
