@@ -6,6 +6,8 @@ namespace FamilyCompass.Infrastructure.Shared.Persistence;
 public class FamilyCompassDbContext(DbContextOptions<FamilyCompassDbContext> options) : DbContext(options)
 {
     public DbSet<Transaction> Transactions => Set<Transaction>();
+    
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,10 +1,12 @@
 using FamilyCompass.Application.Transactions.DTOs;
 using FamilyCompass.Application.Transactions.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyCompass.Api.Transactions;
 
 [ApiController]
+[Authorize]
 [Route("api/v1/transactions")]
 public class TransactionsController(ITransactionService service) : ControllerBase
 {

@@ -1,3 +1,5 @@
+using FamilyCompass.Api.Extensions;
+using FamilyCompass.Application.Persistence;
 using FamilyCompass.Application.Transactions.Interfaces;
 using FamilyCompass.Application.Transactions.Services;
 using FamilyCompass.Infrastructure.Persistence.Transactions;
@@ -5,8 +7,10 @@ using FamilyCompass.Infrastructure.Shared.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -15,10 +19,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     );
 });
 builder.Services.AddOpenApi();
+builder.Services.AddFamilyCompassAuthentication(configuration);
 
 // DB
 builder.Services.AddDbContext<FamilyCompassDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
 // DI
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -35,7 +41,16 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 app.Run();
