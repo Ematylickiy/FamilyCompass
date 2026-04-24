@@ -1,0 +1,177 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 30px;
+  width: 100%;
+  max-width: 448px;
+  margin: 0 auto;
+}
+
+.inner {
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  gap: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.labelBlock {
+  width: 100%;
+}
+
+.label {
+  display: block;
+  margin: 0;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-800);
+}
+
+.passwordField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passwordHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgotLink {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--brand-800);
+  cursor: pointer;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+.inputShell {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  min-height: 56px;
+  margin: 0;
+  padding: 16px 25px;
+  border: 1px solid var(--brand-800);
+  border-radius: 10px;
+  background: #ffffff;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--brand-600-muted);
+}
+
+.input::placeholder {
+  color: #9eafa3;
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-input-brand);
+}
+
+.submitButton {
+  margin-top: 6px;
+  min-height: 56px;
+  border-radius: 10px;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.0938em;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.continueLabel {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--brand-600-muted);
+}
+
+.socialRow {
+  display: flex;
+  gap: 20px;
+}
+
+.socialButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 170px;
+  min-height: 52px;
+  padding: 16px 43px;
+  border: 1px solid var(--brand-800);
+  border-radius: 10px;
+  background: #ffffff;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--brand-800);
+  cursor: not-allowed;
+}
+
+.socialIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--brand-600-muted);
+}
+
+.footerLink {
+  margin-left: 4px;
+  color: var(--brand-800);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}

@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  transactionsApi,
-  type CreateTransactionRequest,
-  type Transaction,
-} from '../api/transactions';
+import { transactionsApi } from '../api';
+import type { CreateTransactionRequest, Transaction } from '../types';
 
 let initialTransactionsPromise: Promise<Transaction[]> | null = null;
 

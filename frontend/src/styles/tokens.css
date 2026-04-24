@@ -1,0 +1,102 @@
+/* Design tokens: colors, space, radius, type — single source of truth for UI. */
+:root {
+  color-scheme: light;
+
+  /* App (glass / dashboard) */
+  --bg: #f4f6f9;
+  --bg-2: #eef2ff;
+  --text: #1a1f2e;
+  --text-muted: #5c6478;
+  --border: #e2e6ef;
+  --border-strong: rgba(20, 24, 40, 0.08);
+  --surface: #ffffff;
+  --surface-elevated: #fafbfd;
+  --surface-muted: #eef1f7;
+  --accent: #2563eb;
+  --accent-2: #7c3aed;
+  --accent-hover: #1d4ed8;
+  --accent-ring: rgba(37, 99, 235, 0.25);
+  --focus-ring-accent: 0 0 0 4px var(--accent-ring);
+
+  --income: #0f766e;
+  --expense: #b91c1c;
+  --danger: #b91c1c;
+  --danger-hover: #991b1b;
+  --danger-border: #f5c2c7;
+  --danger-bg: #fef2f2;
+  --danger-ring: rgba(185, 28, 28, 0.2);
+  --focus-ring-danger: 0 0 0 3px var(--danger-ring);
+
+  --shadow-sm: 0 10px 25px rgba(15, 23, 42, 0.06);
+  --shadow-panel: 0 20px 60px rgba(15, 23, 42, 0.07);
+  --shadow-panel-hover: 0 28px 80px rgba(15, 23, 42, 0.12);
+  --shadow-auth-card: 0 12px 32px 0 rgba(17, 30, 22, 0.06);
+
+  /* Brand / auth (mint + green) */
+  --brand-900: #111e16;
+  --brand-800: #006e22;
+  --brand-700: #2b914a;
+  --brand-400: #45db4f;
+  --brand-600-muted: #3f4a3d;
+  --surface-auth: #edfeef;
+  --brand-divider: #d6e7d8;
+  --brand-gradient: linear-gradient(163deg, var(--brand-700) 0%, var(--brand-400) 100%);
+  --brand-gradient-alt: linear-gradient(94.4deg, #2b914a -7.05%, #45db4f 112.37%);
+  --logo-gradient: linear-gradient(135deg, var(--brand-800) 0%, #5dbb63 100%);
+  --brand-ring: rgba(0, 110, 34, 0.25);
+  --focus-ring-brand: 0 0 0 3px var(--brand-ring);
+  --focus-input-brand: 0 0 0 2px var(--brand-800);
+  --brand-placeholder: rgba(63, 74, 61, 0.4);
+  --brand-icon-muted: rgba(63, 74, 61, 0.35);
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 32px;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-9: 2.46875rem;
+  --auth-card-padding-x: 2.5rem;
+  --auth-card-padding-y: 3.03125rem;
+  --auth-inner-max: 364px;
+  --touch-min: 48px;
+
+  /* Typography */
+  --font-brand: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-serif: 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-ui: Inter, system-ui, sans-serif;
+
+  --text-xs: 0.625rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.5rem;
+
+  --label-uppercase: var(--font-ui);
+  --letter-label: 0.1em;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}

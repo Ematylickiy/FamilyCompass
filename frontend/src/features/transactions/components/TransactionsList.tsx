@@ -1,4 +1,5 @@
-import { TransactionType, type Transaction } from '../api/transactions';
+import { TransactionType, type Transaction } from '../types';
+import { Button } from '../../../ui/Button';
 import styles from './TransactionsList.module.css';
 
 const money = new Intl.NumberFormat('ru-RU', {
@@ -49,13 +50,13 @@ export function TransactionList({ transactions, onDelete }: Props) {
             </div>
             {t.note ? <p className={styles.note}>{t.note}</p> : null}
             <div className={styles.footer}>
-              <button
+              <Button
                 type="button"
-                className={styles.delete}
+                variant="danger"
                 onClick={() => void onDelete(t.id)}
               >
                 Удалить
-              </button>
+              </Button>
             </div>
           </li>
         );

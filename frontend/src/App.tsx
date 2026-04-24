@@ -1,54 +1,26 @@
-import { TransactionForm } from './components/TransactionForm';
-import { TransactionList } from './components/TransactionsList';
-import { useTransactions } from './hooks/useTransactions';
-import styles from './App.module.css';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { AuthLayout } from './layouts/AuthLayout';
+import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { GuestGuard } from './routes/GuestGuard';
+import { ProtectedRoute } from './routes/ProtectedRoute';
 
 export default function App() {
-  const { transactions, loading, error, addTransaction, removeTransaction } =
-    useTransactions();
-
-  if (loading) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.inner}>
-          <div className={styles.banner} data-variant="loading" role="status">
-            Загрузка…
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.page}>
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <h1 className={styles.title}>Семейные финансы</h1>
-        </header>
+    <Routes>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
 
-        {error ? (
-          <div className={styles.banner} data-variant="error" role="alert">
-            {error}
-          </div>
-        ) : null}
+      <Route element={<GuestGuard />}>
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
+      </Route>
 
-        <section className={styles.panel} aria-labelledby="add-heading">
-          <h2 id="add-heading" className={styles.sectionTitle}>
-            Новая транзакция
-          </h2>
-          <TransactionForm onSubmit={addTransaction} />
-        </section>
-
-        <section className={styles.panel} aria-labelledby="list-heading">
-          <h2 id="list-heading" className={styles.sectionTitle}>
-            История
-          </h2>
-          <TransactionList
-            transactions={transactions}
-            onDelete={removeTransaction}
-          />
-        </section>
-      </div>
-    </div>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
