@@ -6,6 +6,7 @@ public class User
     public string Username { get; init; }
     public string PasswordHash { get; private set; }
     public DateTime CreatedAt { get; init; }
+    public List<FamilyMembership> FamilyMemberships { get; private set; } = [];
 
     private User (
         Guid id,

@@ -1,0 +1,15 @@
+using FamilyCompass.Application.Families.DTOs;
+
+namespace FamilyCompass.Application.Families.Interfaces;
+
+public interface IFamilyService
+{
+    Task<FamilyResponse> CreateAsync(
+        CreateFamilyRequest request,
+        Guid currentUserId,
+        CancellationToken cancellationToken = default);
+
+    Task<List<FamilyResponse>> GetMineAsync(
+        Guid currentUserId,
+        CancellationToken cancellationToken = default);
+}

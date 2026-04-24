@@ -1,6 +1,9 @@
 using FamilyCompass.Api.Extensions;
+using FamilyCompass.Application.Families.Interfaces;
 using FamilyCompass.Application.Persistence;
 using FamilyCompass.Application.Transactions.Interfaces;
+using FamilyCompass.Application.Families.Services;
+using FamilyCompass.Infrastructure.Persistence.Families;
 using FamilyCompass.Application.Transactions.Services;
 using FamilyCompass.Infrastructure.Persistence.Transactions;
 using FamilyCompass.Infrastructure.Shared.Persistence;
@@ -29,6 +32,9 @@ builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 // DI
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
+builder.Services.AddScoped<IFamilyMembershipRepository, FamilyMembershipRepository>();
+builder.Services.AddScoped<IFamilyService, FamilyService>();
 
 var app = builder.Build();
 

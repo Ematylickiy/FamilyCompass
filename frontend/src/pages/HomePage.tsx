@@ -1,10 +1,8 @@
+import { useState, type FormEventHandler } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
-import {
-  TransactionForm,
-  TransactionList,
-  useTransactions,
-} from '../features/transactions';
+import { useFamilies } from '../features/families';
+import { FamilyRole } from '../features/families/types';
 import { Alert } from '../ui/Alert';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
@@ -13,12 +11,21 @@ import styles from '../App.module.css';
 export function HomePage() {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { transactions, loading, error, addTransaction, removeTransaction } =
-    useTransactions();
+  const { families, loading, error, createFamily } = useFamilies();
+  const [name, setName] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
+  };
+
+  const handleCreate: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    const ok = await createFamily(name);
+    if (ok) setName('');
+    setSubmitting(false);
   };
 
   if (loading) {
@@ -51,21 +58,43 @@ export function HomePage() {
           </Alert>
         ) : null}
 
-        <Card variant="glass" as="section" aria-labelledby="add-heading">
-          <h2 id="add-heading" className={styles.sectionTitle}>
-            Новая транзакция
+        <Card variant="glass" as="section" aria-labelledby="create-family-heading">
+          <h2 id="create-family-heading" className={styles.sectionTitle}>
+            Создать семью
           </h2>
-          <TransactionForm onSubmit={addTransaction} />
+          <form onSubmit={handleCreate} className={styles.simpleForm}>
+            <input
+              className={styles.simpleInput}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Название семьи"
+              maxLength={128}
+              required
+            />
+            <Button type="submit" variant="brand" disabled={submitting}>
+              {submitting ? 'Создание...' : 'Создать'}
+            </Button>
+          </form>
         </Card>
 
-        <Card variant="glass" as="section" aria-labelledby="list-heading">
-          <h2 id="list-heading" className={styles.sectionTitle}>
-            История
+        <Card variant="glass" as="section" aria-labelledby="families-heading">
+          <h2 id="families-heading" className={styles.sectionTitle}>
+            Мои семьи
           </h2>
-          <TransactionList
-            transactions={transactions}
-            onDelete={removeTransaction}
-          />
+          {families.length === 0 ? (
+            <p className={styles.emptyText}>Вы пока не состоите ни в одной семье.</p>
+          ) : (
+            <ul className={styles.familiesList}>
+              {families.map((family) => (
+                <li key={family.id} className={styles.familyItem}>
+                  <span>{family.name}</span>
+                  <span className={styles.familyRole}>
+                    {family.role === FamilyRole.Owner ? 'Владелец' : 'Участник'}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </Card>
       </div>
     </div>
