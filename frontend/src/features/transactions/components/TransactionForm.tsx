@@ -1,4 +1,4 @@
-import { useId, useState, type FormEventHandler } from 'react';
+import { useState, type FormEventHandler } from 'react';
 import { TransactionType, type CreateTransactionRequest } from '../types';
 import styles from './TransactionForm.module.css';
 
@@ -16,9 +16,8 @@ interface Props {
 }
 
 export function TransactionForm({ onSubmit }: Props) {
-  const formId = useId();
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState<TransactionType>(TransactionType.Income);
+  const [type] = useState<TransactionType>(TransactionType.Income);
   const [category, setCategory] = useState('');
   const [date, setDate] = useState(() =>
     toDateInputValue(new Date().toISOString()),
