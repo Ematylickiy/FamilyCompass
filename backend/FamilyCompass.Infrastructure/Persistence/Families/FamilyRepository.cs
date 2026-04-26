@@ -19,4 +19,16 @@ public class FamilyRepository(FamilyCompassDbContext db) : IFamilyRepository
             .Where(f => f.Memberships.Any(m => m.UserId == userId))
             .ToListAsync(cancellationToken);
     }
+
+    public Task<Family?> GetByIdWithMembershipsAsync(Guid familyId, CancellationToken cancellationToken = default)
+    {
+        return db.Families
+            .Include(f => f.Memberships)
+            .FirstOrDefaultAsync(f => f.Id == familyId, cancellationToken);
+    }
+
+    public void Remove(Family family)
+    {
+        db.Families.Remove(family);
+    }
 }

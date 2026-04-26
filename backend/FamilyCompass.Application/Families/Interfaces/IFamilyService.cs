@@ -12,4 +12,9 @@ public interface IFamilyService
     Task<List<FamilyResponse>> GetMineAsync(
         Guid currentUserId,
         CancellationToken cancellationToken = default);
+
+    Task DeleteAsync(
+        Guid familyId,
+        Guid currentUserId,
+        CancellationToken cancellationToken = default);
 }

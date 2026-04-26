@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FamilyCompass.Api.Families.Contracts;
+using FamilyCompass.Application.Families.Exceptions;
 using FamilyCompass.Application.Families.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,27 @@ public class FamiliesController(IFamilyService familyService) : ControllerBase
         catch (ArgumentException ex)
         {
             return Results.BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpDelete("{familyId:guid}")]
+    public async Task<IResult> Delete(Guid familyId, CancellationToken cancellationToken)
+    {
+        if (!TryGetCurrentUserId(out var currentUserId))
+            return Results.Unauthorized();
+
+        try
+        {
+            await familyService.DeleteAsync(familyId, currentUserId, cancellationToken);
+            return Results.NoContent();
+        }
+        catch (FamilyNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InsufficientFamilyPermissionsException)
+        {
+            return Results.Forbid();
         }
     }
 

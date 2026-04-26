@@ -11,9 +11,10 @@ import styles from '../App.module.css';
 export function HomePage() {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { families, loading, error, createFamily } = useFamilies();
+  const { families, loading, error, createFamily, deleteFamily } = useFamilies();
   const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [deletingFamilyId, setDeletingFamilyId] = useState<string | null>(null);
 
   const handleLogout = () => {
     logout();
@@ -26,6 +27,15 @@ export function HomePage() {
     const ok = await createFamily(name);
     if (ok) setName('');
     setSubmitting(false);
+  };
+
+  const handleDelete = async (familyId: string, familyName: string) => {
+    const confirmed = window.confirm(`Удалить семью "${familyName}"? Это действие нельзя отменить.`);
+    if (!confirmed) return;
+
+    setDeletingFamilyId(familyId);
+    await deleteFamily(familyId);
+    setDeletingFamilyId(null);
   };
 
   if (loading) {
@@ -87,10 +97,22 @@ export function HomePage() {
             <ul className={styles.familiesList}>
               {families.map((family) => (
                 <li key={family.id} className={styles.familyItem}>
-                  <span>{family.name}</span>
-                  <span className={styles.familyRole}>
-                    {family.role === FamilyRole.Owner ? 'Владелец' : 'Участник'}
-                  </span>
+                  <div className={styles.familyMeta}>
+                    <span>{family.name}</span>
+                    <span className={styles.familyRole}>
+                      {family.role === FamilyRole.Owner ? 'Владелец' : 'Участник'}
+                    </span>
+                  </div>
+                  {family.role === FamilyRole.Owner ? (
+                    <Button
+                      type="button"
+                      variant="danger"
+                      onClick={() => void handleDelete(family.id, family.name)}
+                      disabled={deletingFamilyId === family.id}
+                    >
+                      {deletingFamilyId === family.id ? 'Удаление...' : 'Удалить'}
+                    </Button>
+                  ) : null}
                 </li>
               ))}
             </ul>

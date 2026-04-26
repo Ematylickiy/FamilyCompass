@@ -1,7 +1,9 @@
 using FamilyCompass.Application.Families.DTOs;
+using FamilyCompass.Application.Families.Exceptions;
 using FamilyCompass.Application.Families.Interfaces;
 using FamilyCompass.Application.Persistence;
 using FamilyCompass.Domain.Entities;
+using FamilyCompass.Domain.Enums;
 
 namespace FamilyCompass.Application.Families.Services;
 
@@ -55,5 +57,22 @@ public class FamilyService(
                     membership.Role);
             })
             .ToList();
+    }
+
+    public async Task DeleteAsync(
+        Guid familyId,
+        Guid currentUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var family = await familyRepository.GetByIdWithMembershipsAsync(familyId, cancellationToken);
+        if (family is null)
+            throw new FamilyNotFoundException(familyId);
+
+        var membership = family.Memberships.FirstOrDefault(m => m.UserId == currentUserId);
+        if (membership is null || membership.Role != FamilyMembershipRole.Owner)
+            throw new InsufficientFamilyPermissionsException();
+
+        familyRepository.Remove(family);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

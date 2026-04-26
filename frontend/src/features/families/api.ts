@@ -5,4 +5,5 @@ export const familiesApi = {
   getMine: () => client.get<Family[]>('families'),
   create: (payload: CreateFamilyRequest) =>
     client.post<Family>('families', { name: payload.name }),
+  delete: (familyId: string) => client.delete(`families/${familyId}`),
 };

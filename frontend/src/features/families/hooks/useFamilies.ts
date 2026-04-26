@@ -35,9 +35,21 @@ export function useFamilies() {
     }
   }, []);
 
+  const deleteFamily = useCallback(async (familyId: string) => {
+    try {
+      setError(null);
+      await familiesApi.delete(familyId);
+      setFamilies((prev) => prev.filter((family) => family.id !== familyId));
+      return true;
+    } catch {
+      setError('Не удалось удалить семью');
+      return false;
+    }
+  }, []);
+
   useEffect(() => {
     void load();
   }, [load]);
 
-  return { families, loading, error, createFamily };
+  return { families, loading, error, createFamily, deleteFamily };
 }
