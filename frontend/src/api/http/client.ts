@@ -1,11 +1,27 @@
-import { getStoredAccessToken } from '../../auth/tokenStorage';
+import {
+  clearStoredAccessToken,
+  getStoredAccessToken,
+} from '../../auth/tokenStorage';
 
 /** Base path for backend JSON API (Vite proxy → backend). */
-export const API_V1_PREFIX = 'api/v1/';
+export const API_V1_PREFIX = '/api/v1/';
+
+const LOGIN_PATH = '/login';
+
+/** Clears session and sends the user to login (e.g. expired or invalid Bearer token). */
+function redirectToLoginOn401(): void {
+  clearStoredAccessToken();
+  if (window.location.pathname !== LOGIN_PATH) {
+    window.location.replace(LOGIN_PATH);
+  }
+}
 
 async function parseJson<T>(response: Response): Promise<T> {
   const text = await response.text();
   if (!response.ok) {
+    if (response.status === 401) {
+      redirectToLoginOn401();
+    }
     throw new Error(text || `${response.status} ${response.statusText}`);
   }
   if (!text) {
@@ -21,7 +37,12 @@ function authHeader(): HeadersInit {
 
 /** Authenticated JSON client for protected routes. */
 const client = {
-  get: async <T>(path: string, options?: { params?: Record<string, string | number | boolean | undefined> }): Promise<T> => {
+  get: async <T>(
+    path: string,
+    options?: {
+      params?: Record<string, string | number | boolean | undefined>;
+    },
+  ): Promise<T> => {
     const query = options?.params
       ? `?${new URLSearchParams(
           Object.entries(options.params)
@@ -65,6 +86,9 @@ const client = {
       headers: { ...authHeader() },
     });
     if (!response.ok) {
+      if (response.status === 401) {
+        redirectToLoginOn401();
+      }
       const text = await response.text();
       throw new Error(text || `${response.status} ${response.statusText}`);
     }

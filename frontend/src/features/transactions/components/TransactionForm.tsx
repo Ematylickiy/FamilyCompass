@@ -18,20 +18,20 @@ interface Props {
   members: FamilyMember[];
   initial?: CreateTransactionRequest;
   submitText?: string;
-  onCancelEdit?: () => void;
+  onCancel?: () => void;
 }
 
 const expenseCategories = ['Продукты', 'Транспорт', 'ЖКХ', 'Здоровье', 'Развлечения', 'Другое'];
 const incomeCategories = ['Зарплата', 'Подарок', 'Подработка', 'Кэшбек', 'Другое'];
 
-export function TransactionForm({ onSubmit, members, initial, submitText = 'Сохранить', onCancelEdit }: Props) {
-  const [amount, setAmount] = useState('');
+export function TransactionForm({ onSubmit, members, initial, submitText = 'Сохранить', onCancel }: Props) {
+  const [amount, setAmount] = useState(() => (initial != null ? String(initial.amount) : ''));
   const [type, setType] = useState<TransactionType>(initial?.type ?? TransactionType.Expense);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(() => initial?.category ?? '');
   const [date, setDate] = useState(() =>
     toDateInputValue(initial?.date ?? new Date().toISOString()),
   );
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(() => initial?.note ?? '');
   const [performedByUserId, setPerformedByUserId] = useState(initial?.performedByUserId ?? members[0]?.userId ?? '');
   const [submitting, setSubmitting] = useState(false);
 
@@ -98,14 +98,14 @@ export function TransactionForm({ onSubmit, members, initial, submitText = 'Со
         rows={2}
       />
       <div className={styles.actions}>
-        <Button type="submit" variant="brand" disabled={submitting}>
-          {submitting ? 'Сохранение...' : submitText}
-        </Button>
-        {onCancelEdit ? (
-          <Button type="button" variant="ghost" onClick={onCancelEdit}>
+        {onCancel ? (
+          <Button type="button" variant="ghost" onClick={onCancel}>
             Отмена
           </Button>
         ) : null}
+        <Button type="submit" variant="brand" disabled={submitting}>
+          {submitting ? 'Сохранение...' : submitText}
+        </Button>
       </div>
     </form>
   );

@@ -26,18 +26,22 @@ export function TransactionList({ transactions, onDelete, onEdit }: Props) {
   if (transactions.length === 0) {
     return (
       <p className={styles.empty} role="status">
-        Транзакций пока нет — добавьте первую выше.
+        Пока нет транзакций. Нажмите «Добавить транзакцию».
       </p>
     );
   }
 
+  const items = [...transactions].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
+
   return (
     <ul className={styles.list}>
-      {transactions.map((t) => {
+      {items.map((t) => {
         const income = isIncome(t.type);
         return (
-          <li key={t.id} className={styles.card}>
-            <div className={styles.header}>
+          <li key={t.id} className={styles.item}>
+            <div className={styles.itemTop}>
               <span
                 className={`${styles.amount} ${income ? styles.amountIncome : styles.amountExpense}`}
               >
@@ -51,19 +55,11 @@ export function TransactionList({ transactions, onDelete, onEdit }: Props) {
               <span>{t.performedByUsername}</span>
             </div>
             {t.note ? <p className={styles.note}>{t.note}</p> : null}
-            <div className={styles.footer}>
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => onEdit(t)}
-              >
+            <div className={styles.actions}>
+              <Button type="button" variant="ghost" onClick={() => onEdit(t)}>
                 Редактировать
               </Button>
-              <Button
-                type="button"
-                variant="danger"
-                onClick={() => void onDelete(t.id)}
-              >
+              <Button type="button" variant="danger" onClick={() => void onDelete(t.id)}>
                 Удалить
               </Button>
             </div>

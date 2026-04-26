@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../App.module.css';
+import pageStyles from './FamilyTransactionsPage.module.css';
 import { Alert } from '../ui/Alert';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import { Modal } from '../ui/Modal';
 import { familiesApi } from '../features/families/api';
 import type { FamilyMember } from '../features/families/types';
 import {
@@ -20,7 +22,9 @@ export function FamilyTransactionsPage() {
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [membersLoading, setMembersLoading] = useState(true);
   const [editing, setEditing] = useState<Transaction | null>(null);
-  const { transactions, totals, loading, error, addTransaction, updateTransaction, removeTransaction } = useTransactions(familyId);
+  const [formOpen, setFormOpen] = useState(false);
+  const { transactions, loading, error, addTransaction, updateTransaction, removeTransaction } =
+    useTransactions(familyId);
 
   useEffect(() => {
     if (!familyId) return;
@@ -35,21 +39,25 @@ export function FamilyTransactionsPage() {
     })();
   }, [familyId]);
 
+  const closeForm = () => {
+    setFormOpen(false);
+    setEditing(null);
+  };
+
   const handleSubmit = async (payload: CreateTransactionRequest) => {
     if (editing) {
       await updateTransaction(editing.id, payload);
-      setEditing(null);
-      return;
+    } else {
+      await addTransaction(payload);
     }
-
-    await addTransaction(payload);
+    closeForm();
   };
 
   if (!familyId) return <Alert tone="error">Семья не найдена</Alert>;
 
   return (
-    <div className={styles.page}>
-      <div className={styles.inner}>
+    <div className={`${styles.page} ${pageStyles.page}`}>
+      <div className={`${styles.inner} ${pageStyles.inner}`}>
         <Card variant="glass" hero as="header" className={styles.header}>
           <div className={styles.headerRow}>
             <h1 className={styles.title}>Транзакции семьи</h1>
@@ -66,46 +74,63 @@ export function FamilyTransactionsPage() {
         ) : null}
 
         <Card variant="glass" as="section">
-          <h2 className={styles.sectionTitle}>{editing ? 'Редактирование транзакции' : 'Новая транзакция'}</h2>
-          {membersLoading ? (
-            <Alert tone="loading">Загрузка участников...</Alert>
-          ) : (
-            <TransactionForm
-              members={members}
-              initial={
-                editing
-                  ? {
-                      amount: editing.amount,
-                      type: editing.type,
-                      category: editing.category,
-                      date: editing.date,
-                      performedByUserId: editing.performedByUserId,
-                      note: editing.note ?? undefined,
-                    }
-                  : undefined
-              }
-              submitText={editing ? 'Сохранить' : 'Добавить'}
-              onCancelEdit={() => setEditing(null)}
-              onSubmit={handleSubmit}
-            />
-          )}
-        </Card>
-
-        <Card variant="glass" as="section">
-          <h2 className={styles.sectionTitle}>
-            История ({transactions.length}) | Доход: {totals.income} | Расход: {totals.expense} | Баланс: {totals.balance}
-          </h2>
+          <div className={pageStyles.toolbar}>
+            <h2 className={styles.sectionTitle}>Список</h2>
+            <Button
+              type="button"
+              variant="brand"
+              onClick={() => {
+                setEditing(null);
+                setFormOpen(true);
+              }}
+            >
+              Добавить транзакцию
+            </Button>
+          </div>
           {loading ? (
             <Alert tone="loading">Загрузка транзакций...</Alert>
           ) : (
             <TransactionList
               transactions={transactions}
               onDelete={(id) => removeTransaction(id)}
-              onEdit={(transaction) => setEditing(transaction)}
+              onEdit={(transaction) => {
+                setEditing(transaction);
+                setFormOpen(true);
+              }}
             />
           )}
         </Card>
       </div>
+
+      <Modal
+        open={formOpen}
+        onClose={closeForm}
+        title={editing ? 'Редактирование' : 'Новая транзакция'}
+      >
+        {membersLoading ? (
+          <Alert tone="loading">Загрузка участников...</Alert>
+        ) : (
+          <TransactionForm
+            key={editing?.id ?? 'new'}
+            members={members}
+            initial={
+              editing
+                ? {
+                    amount: editing.amount,
+                    type: editing.type,
+                    category: editing.category,
+                    date: editing.date,
+                    performedByUserId: editing.performedByUserId,
+                    note: editing.note ?? undefined,
+                  }
+                : undefined
+            }
+            submitText={editing ? 'Сохранить' : 'Добавить'}
+            onCancel={closeForm}
+            onSubmit={handleSubmit}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

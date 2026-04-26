@@ -1,0 +1,28 @@
+/* Ширина контента в App привязана к max-width: 980px и 2-кол. сетке с 860px — здесь на всю ширину окна */
+.page {
+  align-items: stretch;
+}
+
+.inner {
+  max-width: none;
+  width: 100%;
+}
+
+@media (min-width: 860px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.toolbar h2 {
+  margin: 0;
+}
