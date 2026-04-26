@@ -16,6 +16,7 @@ public class FamilyRepository(FamilyCompassDbContext db) : IFamilyRepository
     {
         return db.Families
             .Include(f => f.Memberships)
+            .ThenInclude(m => m.User)
             .Where(f => f.Memberships.Any(m => m.UserId == userId))
             .ToListAsync(cancellationToken);
     }
@@ -24,6 +25,7 @@ public class FamilyRepository(FamilyCompassDbContext db) : IFamilyRepository
     {
         return db.Families
             .Include(f => f.Memberships)
+            .ThenInclude(m => m.User)
             .FirstOrDefaultAsync(f => f.Id == familyId, cancellationToken);
     }
 

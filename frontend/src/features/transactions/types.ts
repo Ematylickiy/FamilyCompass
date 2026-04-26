@@ -8,11 +8,43 @@ export type TransactionType =
 
 export interface Transaction {
   id: string;
+  familyId: string;
   amount: number;
   type: TransactionType;
   category: string;
   date: string;
+  performedByUserId: string;
+  performedByUsername: string;
   note?: string | null;
 }
 
-export type CreateTransactionRequest = Omit<Transaction, 'id'>;
+export interface CreateTransactionRequest {
+  amount: number;
+  type: TransactionType;
+  category: string;
+  date: string;
+  performedByUserId: string;
+  note?: string;
+}
+
+export type UpdateTransactionRequest = CreateTransactionRequest;
+
+export interface TransactionsQuery {
+  page?: number;
+  pageSize?: number;
+  from?: string;
+  to?: string;
+  type?: TransactionType;
+  category?: string;
+  performedByUserId?: string;
+}
+
+export interface PagedTransactionsResponse {
+  items: Transaction[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalIncome: number;
+  totalExpense: number;
+  balance: number;
+}

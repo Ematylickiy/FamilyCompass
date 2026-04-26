@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AuthLayout } from './layouts/AuthLayout';
+import { FamilyTransactionsPage } from './pages/FamilyTransactionsPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -11,6 +12,7 @@ export default function App() {
     <Routes>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/families/:familyId" element={<FamilyTransactionsPage />} />
       </Route>
 
       <Route element={<GuestGuard />}>

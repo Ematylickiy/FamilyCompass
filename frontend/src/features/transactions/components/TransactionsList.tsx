@@ -19,9 +19,10 @@ function isIncome(type: TransactionType): boolean {
 interface Props {
   transactions: Transaction[];
   onDelete: (id: string) => void | Promise<void>;
+  onEdit: (transaction: Transaction) => void;
 }
 
-export function TransactionList({ transactions, onDelete }: Props) {
+export function TransactionList({ transactions, onDelete, onEdit }: Props) {
   if (transactions.length === 0) {
     return (
       <p className={styles.empty} role="status">
@@ -47,9 +48,17 @@ export function TransactionList({ transactions, onDelete }: Props) {
             <div className={styles.meta}>
               <span className={styles.category}>{t.category}</span>
               <span>{dateTime.format(new Date(t.date))}</span>
+              <span>{t.performedByUsername}</span>
             </div>
             {t.note ? <p className={styles.note}>{t.note}</p> : null}
             <div className={styles.footer}>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => onEdit(t)}
+              >
+                Редактировать
+              </Button>
               <Button
                 type="button"
                 variant="danger"

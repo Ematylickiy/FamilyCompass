@@ -21,16 +21,35 @@ function authHeader(): HeadersInit {
 
 /** Authenticated JSON client for protected routes. */
 const client = {
-  get: async <T>(path: string): Promise<T> => {
-    const response = await fetch(`${API_V1_PREFIX}${path}`, {
+  get: async <T>(path: string, options?: { params?: Record<string, string | number | boolean | undefined> }): Promise<T> => {
+    const query = options?.params
+      ? `?${new URLSearchParams(
+          Object.entries(options.params)
+            .filter(([, value]) => value !== undefined)
+            .map(([key, value]) => [key, String(value)]),
+        ).toString()}`
+      : '';
+    const response = await fetch(`${API_V1_PREFIX}${path}${query}`, {
       headers: { ...authHeader() },
     });
     return parseJson<T>(response);
   },
 
-  post: async <T>(path: string, body: Record<string, unknown>): Promise<T> => {
+  post: async <T>(path: string, body: unknown): Promise<T> => {
     const response = await fetch(`${API_V1_PREFIX}${path}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader(),
+      },
+      body: JSON.stringify(body),
+    });
+    return parseJson<T>(response);
+  },
+
+  put: async <T>(path: string, body: unknown): Promise<T> => {
+    const response = await fetch(`${API_V1_PREFIX}${path}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         ...authHeader(),

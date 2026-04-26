@@ -75,4 +75,26 @@ public class FamilyService(
         familyRepository.Remove(family);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<List<FamilyMemberResponse>> GetMembersAsync(
+        Guid familyId,
+        Guid currentUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var family = await familyRepository.GetByIdWithMembershipsAsync(familyId, cancellationToken);
+        if (family is null)
+            throw new FamilyNotFoundException(familyId);
+
+        var currentMembership = family.Memberships.FirstOrDefault(m => m.UserId == currentUserId);
+        if (currentMembership is null)
+            throw new InsufficientFamilyPermissionsException();
+
+        return family.Memberships
+            .OrderBy(m => m.JoinedAt)
+            .Select(m => new FamilyMemberResponse(
+                m.UserId,
+                m.User.Username,
+                m.Role.ToString()))
+            .ToList();
+    }
 }

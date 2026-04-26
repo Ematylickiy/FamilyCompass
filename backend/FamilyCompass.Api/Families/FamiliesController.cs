@@ -79,6 +79,32 @@ public class FamiliesController(IFamilyService familyService) : ControllerBase
         }
     }
 
+    [HttpGet("{familyId:guid}/members")]
+    public async Task<IResult> GetMembers(Guid familyId, CancellationToken cancellationToken)
+    {
+        if (!TryGetCurrentUserId(out var currentUserId))
+            return Results.Unauthorized();
+
+        try
+        {
+            var members = await familyService.GetMembersAsync(familyId, currentUserId, cancellationToken);
+            var response = members.Select(m =>
+                new FamilyMemberResponse(
+                    m.UserId,
+                    m.Username,
+                    m.Role));
+            return Results.Ok(response);
+        }
+        catch (FamilyNotFoundException)
+        {
+            return Results.NotFound();
+        }
+        catch (InsufficientFamilyPermissionsException)
+        {
+            return Results.Forbid();
+        }
+    }
+
     private bool TryGetCurrentUserId(out Guid userId)
     {
         var claimValue =

@@ -17,4 +17,9 @@ public interface IFamilyService
         Guid familyId,
         Guid currentUserId,
         CancellationToken cancellationToken = default);
+
+    Task<List<FamilyMemberResponse>> GetMembersAsync(
+        Guid familyId,
+        Guid currentUserId,
+        CancellationToken cancellationToken = default);
 }

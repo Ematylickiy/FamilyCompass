@@ -2,14 +2,11 @@ using FamilyCompass.Domain.Enums;
 
 namespace FamilyCompass.Application.Transactions.DTOs;
 
-public record TransactionResponse(
-    Guid Id,
-    Guid FamilyId,
+public record UpdateTransactionRequest(
     decimal Amount,
     TransactionType Type,
     string Category,
     DateTime Date,
     Guid PerformedByUserId,
-    string PerformedByUsername,
     string? Note
 );

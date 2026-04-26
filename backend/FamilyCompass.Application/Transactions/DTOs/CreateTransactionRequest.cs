@@ -7,5 +7,6 @@ public record CreateTransactionRequest(
     TransactionType Type,
     string Category,
     DateTime Date,
+    Guid PerformedByUserId,
     string? Note
 );

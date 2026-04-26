@@ -103,16 +103,25 @@ export function HomePage() {
                       {family.role === FamilyRole.Owner ? 'Владелец' : 'Участник'}
                     </span>
                   </div>
-                  {family.role === FamilyRole.Owner ? (
+                  <div className={styles.headerRow}>
                     <Button
                       type="button"
-                      variant="danger"
-                      onClick={() => void handleDelete(family.id, family.name)}
-                      disabled={deletingFamilyId === family.id}
+                      variant="ghost"
+                      onClick={() => navigate(`/families/${family.id}`)}
                     >
-                      {deletingFamilyId === family.id ? 'Удаление...' : 'Удалить'}
+                      Открыть
                     </Button>
-                  ) : null}
+                    {family.role === FamilyRole.Owner ? (
+                      <Button
+                        type="button"
+                        variant="danger"
+                        onClick={() => void handleDelete(family.id, family.name)}
+                        disabled={deletingFamilyId === family.id}
+                      >
+                        {deletingFamilyId === family.id ? 'Удаление...' : 'Удалить'}
+                      </Button>
+                    ) : null}
+                  </div>
                 </li>
               ))}
             </ul>

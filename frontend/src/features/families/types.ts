@@ -16,3 +16,9 @@ export interface Family {
 export interface CreateFamilyRequest {
   name: string;
 }
+
+export interface FamilyMember {
+  userId: string;
+  username: string;
+  role: string;
+}
